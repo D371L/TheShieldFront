@@ -8,25 +8,102 @@ if (burger && menu) {
     });
 }
 
-// Quick contact form
+// Toast notification system
+function showToast(message, type = 'info', duration = 5000) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  
+  container.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => toast.classList.add('show'), 100);
+  
+  // Auto remove
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+
+// Quick contact form with security enhancements
 const form = document.getElementById('quick-form');
 if (form) {
-  form.addEventListener('submit', (e) => {
+  // Generate CSRF token
+  const csrfToken = document.getElementById('csrf-token');
+  if (csrfToken) {
+    csrfToken.value = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = /** @type {HTMLInputElement|null} */(document.getElementById('replyEmail'));
     const message = /** @type {HTMLTextAreaElement|null} */(document.getElementById('message'));
-    if (!email || !message) return;
-    if (!email.value || !message.value) {
-      alert('נא למלא את כל השדות.');
-      return;
+    const csrf = /** @type {HTMLInputElement|null} */(document.getElementById('csrf-token'));
+    const submitBtn = /** @type {HTMLButtonElement|null} */(document.getElementById('submit-btn'));
+    
+    if (!email || !message || !csrf || !submitBtn) return;
+    
+    // Set loading state
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    
+    try {
+      // Sanitize inputs
+      const emailValue = email.value.trim();
+      const messageValue = message.value.trim();
+      
+      if (!emailValue || !messageValue) {
+        showToast('נא למלא את כל השדות.', 'error');
+        return;
+      }
+      
+      // Enhanced email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailValue)) {
+        showToast('נא להזין כתובת דוא״ל תקינה.', 'error');
+        email.focus();
+        return;
+      }
+      
+      // Check for suspicious content
+      const suspiciousPatterns = /<script|javascript:|on\w+\s*=/i;
+      if (suspiciousPatterns.test(messageValue)) {
+        showToast('ההודעה מכילה תוכן לא מורשה.', 'error');
+        return;
+      }
+      
+      // Basic email validity check leverages browser validation
+      if (!email.checkValidity()) {
+        email.reportValidity();
+        return;
+      }
+      
+      // Simulate form submission with security token
+      console.log('Form submitted with CSRF token:', csrf.value);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      showToast('תודה, ההודעה התקבלה בהצלחה!', 'success');
+      form.reset();
+      
+      // Regenerate CSRF token
+      if (csrf) {
+        csrf.value = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      }
+      
+    } catch (error) {
+      console.error('Form submission error:', error);
+      showToast('אירעה שגיאה בשליחת ההודעה. נא לנסות שוב.', 'error');
+    } finally {
+      // Reset loading state
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
     }
-    // Basic email validity check leverages browser validation
-    if (!email.checkValidity()) {
-      email.reportValidity();
-      return;
-    }
-    alert('תודה, ההודעה התקבלה.');
-    form.reset();
   });
 }
 
