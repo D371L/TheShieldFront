@@ -54,6 +54,13 @@
     
     <!-- DNS prefetch for external resources -->
     <link rel="dns-prefetch" href="//t.me" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css" />
     
@@ -96,6 +103,21 @@
 
 <!-- Toast notifications -->
 <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Progress bar -->
+<div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="progress-glow" id="progress-glow"></div>
+</div>
+
+<!-- Mouse cursor effects -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-outline" id="cursor-outline"></div>
+
+<!-- Futuristic UI elements -->
+<div class="scan-lines" aria-hidden="true"></div>
+<div class="grid-overlay" aria-hidden="true"></div>
+<div class="particles-container" id="particles-container" aria-hidden="true"></div>
 
 <!-- Header -->
 <header class="site-header">

@@ -1,11 +1,371 @@
-// Burger (если уже есть — оставь)
+// Progress bar functionality
+function updateProgressBar() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / scrollHeight) * 100;
+    
+    const progressBar = document.getElementById('progress-bar');
+    const progressGlow = document.getElementById('progress-glow');
+    
+    if (progressBar && progressGlow) {
+        progressBar.style.width = scrollPercent + '%';
+        progressGlow.style.width = scrollPercent + '%';
+    }
+}
+
+// Cyberpunk tactical cursor
+function initCustomCursor() {
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorOutline = document.getElementById('cursor-outline');
+    
+    if (!cursorDot || !cursorOutline) return;
+    
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+    let lastMouseX = 0, lastMouseY = 0;
+    let isMoving = false;
+    let scanInterval;
+    
+    // Create cyberpunk data particle
+    function createCyberParticle(x, y) {
+        const particle = document.createElement('div');
+        particle.className = 'cursor-particle';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        
+        // Random direction and distance
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 20 + 10;
+        const particleX = Math.cos(angle) * distance;
+        const particleY = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--particle-x', particleX + 'px');
+        particle.style.setProperty('--particle-y', particleY + 'px');
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+            }
+        }, 1500);
+    }
+    
+    // Create cyberpunk data trail
+    function createCyberTrail(x, y) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-magical-trail';
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        
+        document.body.appendChild(trail);
+        
+        setTimeout(() => {
+            if (trail.parentNode) {
+                trail.parentNode.removeChild(trail);
+            }
+        }, 1000);
+    }
+    
+    // Create cyberpunk scan burst
+    function createCyberBurst(x, y) {
+        for (let i = 0; i < 4; i++) {
+            const burst = document.createElement('div');
+            burst.className = 'cursor-magical-burst';
+            burst.style.left = x + 'px';
+            burst.style.top = y + 'px';
+            
+            // Create burst in crosshair directions
+            const angle = (i / 4) * Math.PI * 2;
+            const distance = 15;
+            const burstX = Math.cos(angle) * distance;
+            const burstY = Math.sin(angle) * distance;
+            
+            burst.style.setProperty('--burst-x', burstX + 'px');
+            burst.style.setProperty('--burst-y', burstY + 'px');
+            
+            document.body.appendChild(burst);
+            
+            setTimeout(() => {
+                if (burst.parentNode) {
+                    burst.parentNode.removeChild(burst);
+                }
+            }, 800);
+        }
+    }
+    
+    // Create cyberpunk scan lines
+    function createScanLines() {
+        for (let i = 0; i < 2; i++) {
+            const scanLine = document.createElement('div');
+            scanLine.className = 'cursor-sparkle';
+            
+            // Random position around cursor
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 30 + 15;
+            const scanX = mouseX + Math.cos(angle) * distance;
+            const scanY = mouseY + Math.sin(angle) * distance;
+            
+            scanLine.style.left = scanX + 'px';
+            scanLine.style.top = scanY + 'px';
+            
+            document.body.appendChild(scanLine);
+            
+            setTimeout(() => {
+                if (scanLine.parentNode) {
+                    scanLine.parentNode.removeChild(scanLine);
+                }
+            }, 2000);
+        }
+    }
+    
+    document.addEventListener('mousemove', (e) => {
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Calculate movement speed
+        const deltaX = mouseX - lastMouseX;
+        const deltaY = mouseY - lastMouseY;
+        const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        // Create cyberpunk effects based on movement
+        if (speed > 5) {
+            isMoving = true;
+            
+            // Create cyber trail
+            if (Math.random() < 0.6) {
+                createCyberTrail(mouseX, mouseY);
+            }
+            
+            // Create cyber particles
+            if (Math.random() < 0.3) {
+                createCyberParticle(mouseX, mouseY);
+            }
+        } else {
+            isMoving = false;
+        }
+        
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+    });
+    
+    function animateOutline() {
+        outlineX += (mouseX - outlineX) * 0.15; // Smooth following
+        outlineY += (mouseY - outlineY) * 0.15;
+        
+        cursorOutline.style.left = outlineX + 'px';
+        cursorOutline.style.top = outlineY + 'px';
+        
+        requestAnimationFrame(animateOutline);
+    }
+    animateOutline();
+    
+    // Create scan lines periodically
+    scanInterval = setInterval(createScanLines, 3000);
+    
+    // Hover effects
+    const hoverElements = document.querySelectorAll('a, button, .card, .btn');
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursorOutline.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursorOutline.classList.remove('hover');
+        });
+    });
+    
+    // Click effects
+    document.addEventListener('mousedown', () => {
+        cursorOutline.classList.add('click');
+        // Create cyber burst on click
+        createCyberBurst(mouseX, mouseY);
+    });
+    document.addEventListener('mouseup', () => {
+        cursorOutline.classList.remove('click');
+    });
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (scanInterval) {
+            clearInterval(scanInterval);
+        }
+    });
+}
+
+// Enhanced cyber impulse system with grid movement
+function initCyberImpulses() {
+    const container = document.getElementById('particles-container');
+    if (!container) return;
+    
+    // Add electric field background
+    const electricField = document.createElement('div');
+    electricField.className = 'electric-field';
+    container.appendChild(electricField);
+    
+    // Grid configuration (matching the CSS grid)
+    const GRID_SIZE = 50; // matches background-size: 50px 50px
+    const gridWidth = Math.ceil(window.innerWidth / GRID_SIZE);
+    const gridHeight = Math.ceil(window.innerHeight / GRID_SIZE);
+    
+    function createCyberImpulse() {
+        const impulse = document.createElement('div');
+        impulse.className = 'cyber-impulse';
+        
+        // Random colors
+        const colors = ['var(--blue)', 'var(--green)', '#00ffff', '#ff00ff', '#ffff00'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Start at random grid position
+        const startX = Math.floor(Math.random() * gridWidth) * GRID_SIZE;
+        const startY = Math.floor(Math.random() * gridHeight) * GRID_SIZE;
+        
+        // End at random grid position (different from start)
+        let endX, endY;
+        do {
+            endX = Math.floor(Math.random() * gridWidth) * GRID_SIZE;
+            endY = Math.floor(Math.random() * gridHeight) * GRID_SIZE;
+        } while (endX === startX && endY === startY);
+        
+        // Set position and animation
+        impulse.style.left = startX + 'px';
+        impulse.style.top = startY + 'px';
+        impulse.style.setProperty('--end-x', (endX - startX) + 'px');
+        impulse.style.setProperty('--end-y', (endY - startY) + 'px');
+        
+        // Set color
+        impulse.style.background = color;
+        impulse.style.boxShadow = `0 0 8px ${color}, 0 0 16px ${color}`;
+        
+        // Random animation duration
+        const duration = Math.random() * 2 + 3; // 3-5 seconds
+        impulse.style.animationDuration = duration + 's';
+        
+        container.appendChild(impulse);
+        
+        // Create trail effect
+        createCyberTrail(startX, startY, endX, endY, color, duration);
+        
+        // Remove impulse after animation
+        setTimeout(() => {
+            if (impulse.parentNode) {
+                impulse.parentNode.removeChild(impulse);
+            }
+        }, duration * 1000);
+    }
+    
+    function createCyberTrail(startX, startY, endX, endY, color, duration) {
+        const steps = Math.floor(duration * 10); // 10 steps per second
+        const stepX = (endX - startX) / steps;
+        const stepY = (endY - startY) / steps;
+        
+        for (let i = 0; i < steps; i++) {
+            setTimeout(() => {
+                const trail = document.createElement('div');
+                trail.className = 'cyber-trail';
+                trail.style.left = (startX + stepX * i) + 'px';
+                trail.style.top = (startY + stepY * i) + 'px';
+                trail.style.background = color;
+                trail.style.boxShadow = `0 0 4px ${color}`;
+                
+                container.appendChild(trail);
+                
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        trail.parentNode.removeChild(trail);
+                    }
+                }, 1000);
+            }, i * 100);
+        }
+    }
+    
+    // Create impulses periodically
+    setInterval(createCyberImpulse, 1200);
+    
+    // Initial impulses
+    for (let i = 0; i < 3; i++) {
+        setTimeout(createCyberImpulse, i * 1200);
+    }
+}
+
+// Initialize effects
+document.addEventListener('DOMContentLoaded', () => {
+    updateProgressBar();
+    initCustomCursor();
+    initCyberImpulses();
+});
+
+window.addEventListener('scroll', updateProgressBar);
+
+// Burger menu functionality
 const burger = document.getElementById('burger');
-const menu = document.getElementById('menu');
+const menu = document.getElementById('navigation');
 if (burger && menu) {
-    burger.addEventListener('click', () => {
+    // Function to update active menu item
+    function updateActiveMenuItem() {
+        const menuLinks = menu.querySelectorAll('a');
+        const sections = menuLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+        
+        // Find which section is currently in view
+        let activeIndex = 0;
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        sections.forEach((section, index) => {
+            if (section && section.offsetTop <= scrollPosition) {
+                activeIndex = index;
+            }
+        });
+        
+        // Update aria-current attributes
+        menuLinks.forEach((link, index) => {
+            if (index === activeIndex) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+    
+    // Toggle menu on burger click
+    burger.addEventListener('click', (e) => {
+        e.stopPropagation();
         const isOpen = menu.classList.toggle('open');
         burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        
+        // Update active menu item when opening menu
+        if (isOpen) {
+            updateActiveMenuItem();
+        }
     });
+    
+    // Close menu when clicking on menu links
+    const menuLinks = menu.querySelectorAll('a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            menu.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !burger.contains(e.target)) {
+            menu.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+        }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) {
+            menu.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+        }
+    });
+    
+    // Update active menu item on scroll
+    window.addEventListener('scroll', updateActiveMenuItem);
 }
 
 // Toast notification system
@@ -139,7 +499,7 @@ if (form) {
 })();
 
 
-// scrollspy
+// scrollspy for desktop menu only
 const links = [...document.querySelectorAll('.menu a')];
 const sections = links
   .map(a => document.querySelector(a.getAttribute('href')))
@@ -149,9 +509,12 @@ if (sections.length) {
   const spy = new IntersectionObserver((entries) => {
       entries.forEach(e => {
           if (e.isIntersecting) {
-              links.forEach(l => l.removeAttribute('aria-current'));
-              const idx = sections.indexOf(e.target);
-              if (links[idx]) links[idx].setAttribute('aria-current', 'page');
+              // Only update if mobile menu is closed
+              if (!menu || !menu.classList.contains('open')) {
+                  links.forEach(l => l.removeAttribute('aria-current'));
+                  const idx = sections.indexOf(e.target);
+                  if (links[idx]) links[idx].setAttribute('aria-current', 'page');
+              }
           }
       });
   }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
