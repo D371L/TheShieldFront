@@ -62,7 +62,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=17" />
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -111,27 +111,42 @@
 </div>
 
 <!-- Mouse cursor effects -->
-<div class="cursor-dot" id="cursor-dot"></div>
-<div class="cursor-outline" id="cursor-outline"></div>
 
-<!-- Futuristic UI elements -->
+<!-- Clean UI elements in Mossad style -->
 <div class="scan-lines" aria-hidden="true"></div>
 <div class="grid-overlay" aria-hidden="true"></div>
-<div class="particles-container" id="particles-container" aria-hidden="true"></div>
 
 <!-- Header -->
 <header class="site-header">
     <div class="wrap nav">
         <a class="brand" href="#home" aria-label="חזית המגן: שומרי האיזון">
-            <!-- <img class="brand-logo" src="assets/logo.svg" alt="חזית המגן: שומרי האיזון" /> -->
+            <img class="brand-logo" src="assets/logo.svg?v=3" alt="חזית המגן: שומרי האיזון" />
             <div class="t"><b>חזית המגן: שומרי האיזון</b></div>
         </a>
+        
         <nav class="menu" id="navigation" aria-label="תפריט ראשי">
-            <a href="#home" class="active" aria-current="page">ראשי</a>
+            <a href="#home">ראשי</a>
             <a href="#mission">אודות</a>
             <a href="#reports">דוחות</a>
             <a href="#contact">צור קשר</a>
         </nav>
+        
+        <div class="header-actions">
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="he" aria-label="עברית">עברית</button>
+                <button class="lang-btn disabled" data-lang="ar" aria-label="العربية">العربية</button>
+                <button class="lang-btn disabled" data-lang="en" aria-label="English">English</button>
+                <button class="lang-btn disabled" data-lang="ru" aria-label="Русский">Русский</button>
+            </div>
+            
+            <!-- Report Button -->
+            <button class="report-btn" aria-label="שליחת דיווח">
+                <span class="btn-text">שליחת דיווח</span>
+                <span class="btn-icon">📊</span>
+            </button>
+        </div>
+        
         <button class="burger" id="burger" aria-label="פתח/סגור תפריט" aria-controls="menu" aria-expanded="false">☰</button>
     </div>
 </header>

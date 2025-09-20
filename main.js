@@ -13,288 +13,65 @@ function updateProgressBar() {
     }
 }
 
-// Cyberpunk tactical cursor
-function initCustomCursor() {
-    const cursorDot = document.getElementById('cursor-dot');
-    const cursorOutline = document.getElementById('cursor-outline');
-    
-    if (!cursorDot || !cursorOutline) return;
-    
-    let mouseX = 0, mouseY = 0;
-    let outlineX = 0, outlineY = 0;
-    let lastMouseX = 0, lastMouseY = 0;
-    let isMoving = false;
-    let scanInterval;
-    
-    // Create cyberpunk data particle
-    function createCyberParticle(x, y) {
-        const particle = document.createElement('div');
-        particle.className = 'cursor-particle';
-        particle.style.left = x + 'px';
-        particle.style.top = y + 'px';
-        
-        // Random direction and distance
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 20 + 10;
-        const particleX = Math.cos(angle) * distance;
-        const particleY = Math.sin(angle) * distance;
-        
-        particle.style.setProperty('--particle-x', particleX + 'px');
-        particle.style.setProperty('--particle-y', particleY + 'px');
-        
-        document.body.appendChild(particle);
-        
-        setTimeout(() => {
-            if (particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-        }, 1500);
-    }
-    
-    // Create cyberpunk data trail
-    function createCyberTrail(x, y) {
-        const trail = document.createElement('div');
-        trail.className = 'cursor-magical-trail';
-        trail.style.left = x + 'px';
-        trail.style.top = y + 'px';
-        
-        document.body.appendChild(trail);
-        
-        setTimeout(() => {
-            if (trail.parentNode) {
-                trail.parentNode.removeChild(trail);
-            }
-        }, 1000);
-    }
-    
-    // Create cyberpunk scan burst
-    function createCyberBurst(x, y) {
-        for (let i = 0; i < 4; i++) {
-            const burst = document.createElement('div');
-            burst.className = 'cursor-magical-burst';
-            burst.style.left = x + 'px';
-            burst.style.top = y + 'px';
-            
-            // Create burst in crosshair directions
-            const angle = (i / 4) * Math.PI * 2;
-            const distance = 15;
-            const burstX = Math.cos(angle) * distance;
-            const burstY = Math.sin(angle) * distance;
-            
-            burst.style.setProperty('--burst-x', burstX + 'px');
-            burst.style.setProperty('--burst-y', burstY + 'px');
-            
-            document.body.appendChild(burst);
-            
-            setTimeout(() => {
-                if (burst.parentNode) {
-                    burst.parentNode.removeChild(burst);
-                }
-            }, 800);
-        }
-    }
-    
-    // Create cyberpunk scan lines
-    function createScanLines() {
-        for (let i = 0; i < 2; i++) {
-            const scanLine = document.createElement('div');
-            scanLine.className = 'cursor-sparkle';
-            
-            // Random position around cursor
-            const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 30 + 15;
-            const scanX = mouseX + Math.cos(angle) * distance;
-            const scanY = mouseY + Math.sin(angle) * distance;
-            
-            scanLine.style.left = scanX + 'px';
-            scanLine.style.top = scanY + 'px';
-            
-            document.body.appendChild(scanLine);
-            
-            setTimeout(() => {
-                if (scanLine.parentNode) {
-                    scanLine.parentNode.removeChild(scanLine);
-                }
-            }, 2000);
-        }
-    }
-    
-    document.addEventListener('mousemove', (e) => {
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Calculate movement speed
-        const deltaX = mouseX - lastMouseX;
-        const deltaY = mouseY - lastMouseY;
-        const speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        
-        // Create cyberpunk effects based on movement
-        if (speed > 5) {
-            isMoving = true;
-            
-            // Create cyber trail
-            if (Math.random() < 0.6) {
-                createCyberTrail(mouseX, mouseY);
-            }
-            
-            // Create cyber particles
-            if (Math.random() < 0.3) {
-                createCyberParticle(mouseX, mouseY);
-            }
-        } else {
-            isMoving = false;
-        }
-        
-        cursorDot.style.left = mouseX + 'px';
-        cursorDot.style.top = mouseY + 'px';
-    });
-    
-    function animateOutline() {
-        outlineX += (mouseX - outlineX) * 0.15; // Smooth following
-        outlineY += (mouseY - outlineY) * 0.15;
-        
-        cursorOutline.style.left = outlineX + 'px';
-        cursorOutline.style.top = outlineY + 'px';
-        
-        requestAnimationFrame(animateOutline);
-    }
-    animateOutline();
-    
-    // Create scan lines periodically
-    scanInterval = setInterval(createScanLines, 3000);
-    
-    // Hover effects
-    const hoverElements = document.querySelectorAll('a, button, .card, .btn');
-    hoverElements.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursorOutline.classList.add('hover');
-        });
-        el.addEventListener('mouseleave', () => {
-            cursorOutline.classList.remove('hover');
-        });
-    });
-    
-    // Click effects
-    document.addEventListener('mousedown', () => {
-        cursorOutline.classList.add('click');
-        // Create cyber burst on click
-        createCyberBurst(mouseX, mouseY);
-    });
-    document.addEventListener('mouseup', () => {
-        cursorOutline.classList.remove('click');
-    });
-    
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', () => {
-        if (scanInterval) {
-            clearInterval(scanInterval);
-        }
-    });
-}
 
-// Enhanced cyber impulse system with grid movement
-function initCyberImpulses() {
-    const container = document.getElementById('particles-container');
-    if (!container) return;
-    
-    // Add electric field background
-    const electricField = document.createElement('div');
-    electricField.className = 'electric-field';
-    container.appendChild(electricField);
-    
-    // Grid configuration (matching the CSS grid)
-    const GRID_SIZE = 50; // matches background-size: 50px 50px
-    const gridWidth = Math.ceil(window.innerWidth / GRID_SIZE);
-    const gridHeight = Math.ceil(window.innerHeight / GRID_SIZE);
-    
-    function createCyberImpulse() {
-        const impulse = document.createElement('div');
-        impulse.className = 'cyber-impulse';
-        
-        // Random colors
-        const colors = ['var(--blue)', 'var(--green)', '#00ffff', '#ff00ff', '#ffff00'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        // Start at random grid position
-        const startX = Math.floor(Math.random() * gridWidth) * GRID_SIZE;
-        const startY = Math.floor(Math.random() * gridHeight) * GRID_SIZE;
-        
-        // End at random grid position (different from start)
-        let endX, endY;
-        do {
-            endX = Math.floor(Math.random() * gridWidth) * GRID_SIZE;
-            endY = Math.floor(Math.random() * gridHeight) * GRID_SIZE;
-        } while (endX === startX && endY === startY);
-        
-        // Set position and animation
-        impulse.style.left = startX + 'px';
-        impulse.style.top = startY + 'px';
-        impulse.style.setProperty('--end-x', (endX - startX) + 'px');
-        impulse.style.setProperty('--end-y', (endY - startY) + 'px');
-        
-        // Set color
-        impulse.style.background = color;
-        impulse.style.boxShadow = `0 0 8px ${color}, 0 0 16px ${color}`;
-        
-        // Random animation duration
-        const duration = Math.random() * 2 + 3; // 3-5 seconds
-        impulse.style.animationDuration = duration + 's';
-        
-        container.appendChild(impulse);
-        
-        // Create trail effect
-        createCyberTrail(startX, startY, endX, endY, color, duration);
-        
-        // Remove impulse after animation
-        setTimeout(() => {
-            if (impulse.parentNode) {
-                impulse.parentNode.removeChild(impulse);
-            }
-        }, duration * 1000);
-    }
-    
-    function createCyberTrail(startX, startY, endX, endY, color, duration) {
-        const steps = Math.floor(duration * 10); // 10 steps per second
-        const stepX = (endX - startX) / steps;
-        const stepY = (endY - startY) / steps;
-        
-        for (let i = 0; i < steps; i++) {
-            setTimeout(() => {
-                const trail = document.createElement('div');
-                trail.className = 'cyber-trail';
-                trail.style.left = (startX + stepX * i) + 'px';
-                trail.style.top = (startY + stepY * i) + 'px';
-                trail.style.background = color;
-                trail.style.boxShadow = `0 0 4px ${color}`;
-                
-                container.appendChild(trail);
-                
-                setTimeout(() => {
-                    if (trail.parentNode) {
-                        trail.parentNode.removeChild(trail);
-                    }
-                }, 1000);
-            }, i * 100);
-        }
-    }
-    
-    // Create impulses periodically
-    setInterval(createCyberImpulse, 1200);
-    
-    // Initial impulses
-    for (let i = 0; i < 3; i++) {
-        setTimeout(createCyberImpulse, i * 1200);
-    }
-}
 
 // Initialize effects
 document.addEventListener('DOMContentLoaded', () => {
     updateProgressBar();
-    initCustomCursor();
-    initCyberImpulses();
+    initReportButton();
+    initIntelligenceEffects();
+    initActiveMenuItem();
 });
+
+// Initialize active menu item on page load
+function initActiveMenuItem() {
+    const menuLinks = document.querySelectorAll('.menu a');
+    const sections = menuLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    
+    // Check if user is at bottom of page
+    const documentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY + windowHeight >= documentHeight - 100) {
+        // User is at bottom, highlight last section
+        menuLinks.forEach((link, index) => {
+            if (index === menuLinks.length - 1) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+        return;
+    }
+    
+    // Find which section is currently most visible
+    let activeIndex = 0;
+    let maxVisibleArea = 0;
+    
+    sections.forEach((section, index) => {
+        if (section) {
+            const rect = section.getBoundingClientRect();
+            const visibleTop = Math.max(0, rect.top);
+            const visibleBottom = Math.min(window.innerHeight, rect.bottom);
+            const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+            
+            if (visibleHeight > maxVisibleArea) {
+                maxVisibleArea = visibleHeight;
+                activeIndex = index;
+            }
+        }
+    });
+    
+    // Set initial active menu item
+    menuLinks.forEach((link, index) => {
+        if (index === activeIndex) {
+            link.setAttribute('aria-current', 'page');
+        } else {
+            link.removeAttribute('aria-current');
+        }
+    });
+}
 
 window.addEventListener('scroll', updateProgressBar);
 
@@ -302,29 +79,23 @@ window.addEventListener('scroll', updateProgressBar);
 const burger = document.getElementById('burger');
 const menu = document.getElementById('navigation');
 if (burger && menu) {
-    // Function to update active menu item
-    function updateActiveMenuItem() {
-        const menuLinks = menu.querySelectorAll('a');
-        const sections = menuLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
-        
-        // Find which section is currently in view
-        let activeIndex = 0;
-        const scrollPosition = window.scrollY + window.innerHeight / 2;
-        
-        sections.forEach((section, index) => {
-            if (section && section.offsetTop <= scrollPosition) {
-                activeIndex = index;
-            }
-        });
-        
-        // Update aria-current attributes
-        menuLinks.forEach((link, index) => {
-            if (index === activeIndex) {
-                link.setAttribute('aria-current', 'page');
-            } else {
-                link.removeAttribute('aria-current');
-            }
-        });
+    // Function to update mobile menu when opened
+    function updateMobileMenu() {
+        if (menu.classList.contains('open')) {
+            // Copy active state from desktop menu to mobile menu
+            const desktopLinks = document.querySelectorAll('.menu a');
+            const mobileLinks = menu.querySelectorAll('a');
+            
+            desktopLinks.forEach((desktopLink, index) => {
+                if (mobileLinks[index]) {
+                    if (desktopLink.hasAttribute('aria-current')) {
+                        mobileLinks[index].setAttribute('aria-current', 'page');
+                    } else {
+                        mobileLinks[index].removeAttribute('aria-current');
+                    }
+                }
+            });
+        }
     }
     
     // Toggle menu on burger click
@@ -333,9 +104,9 @@ if (burger && menu) {
         const isOpen = menu.classList.toggle('open');
         burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         
-        // Update active menu item when opening menu
+        // Update mobile menu when opening
         if (isOpen) {
-            updateActiveMenuItem();
+            updateMobileMenu();
         }
     });
     
@@ -345,6 +116,8 @@ if (burger && menu) {
         link.addEventListener('click', () => {
             menu.classList.remove('open');
             burger.setAttribute('aria-expanded', 'false');
+            // Clear mobile menu highlights when closing
+            menuLinks.forEach(l => l.removeAttribute('aria-current'));
         });
     });
     
@@ -361,11 +134,17 @@ if (burger && menu) {
         if (e.key === 'Escape' && menu.classList.contains('open')) {
             menu.classList.remove('open');
             burger.setAttribute('aria-expanded', 'false');
+            // Clear mobile menu highlights when closing
+            menuLinks.forEach(l => l.removeAttribute('aria-current'));
         }
     });
     
-    // Update active menu item on scroll
-    window.addEventListener('scroll', updateActiveMenuItem);
+    // Update mobile menu on scroll when it's open
+    window.addEventListener('scroll', () => {
+        if (menu.classList.contains('open')) {
+            updateMobileMenu();
+        }
+    });
 }
 
 // Toast notification system
@@ -499,26 +278,77 @@ if (form) {
 })();
 
 
-// scrollspy for desktop menu only
+// Unified scrollspy for desktop menu
 const links = [...document.querySelectorAll('.menu a')];
 const sections = links
   .map(a => document.querySelector(a.getAttribute('href')))
   .filter(Boolean);
 
 if (sections.length) {
-  const spy = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-          if (e.isIntersecting) {
-              // Only update if mobile menu is closed
-              if (!menu || !menu.classList.contains('open')) {
-                  links.forEach(l => l.removeAttribute('aria-current'));
-                  const idx = sections.indexOf(e.target);
-                  if (links[idx]) links[idx].setAttribute('aria-current', 'page');
+  let isScrolling = false;
+  let scrollTimeout;
+  
+  function updateActiveMenuItem() {
+      // Only update if mobile menu is closed
+      if (!menu || !menu.classList.contains('open')) {
+          const currentScrollY = window.scrollY;
+          const documentHeight = document.documentElement.scrollHeight;
+          const windowHeight = window.innerHeight;
+          
+          // If user is near bottom of page, highlight last section
+          if (currentScrollY + windowHeight >= documentHeight - 100) {
+              links.forEach(l => l.removeAttribute('aria-current'));
+              if (links[links.length - 1]) {
+                  links[links.length - 1].setAttribute('aria-current', 'page');
               }
+              return;
           }
-      });
-  }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
-  sections.forEach(s => spy.observe(s));
+          
+          // Find which section is currently most visible
+          let activeIndex = 0;
+          let maxVisibleArea = 0;
+          
+          sections.forEach((section, index) => {
+              if (section) {
+                  const rect = section.getBoundingClientRect();
+                  const visibleTop = Math.max(0, rect.top);
+                  const visibleBottom = Math.min(window.innerHeight, rect.bottom);
+                  const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+                  
+                  if (visibleHeight > maxVisibleArea) {
+                      maxVisibleArea = visibleHeight;
+                      activeIndex = index;
+                  }
+              }
+          });
+          
+          // Update active menu item
+          links.forEach((link, index) => {
+              if (index === activeIndex) {
+                  link.setAttribute('aria-current', 'page');
+              } else {
+                  link.removeAttribute('aria-current');
+              }
+          });
+      }
+  }
+  
+  // Throttled scroll listener
+  window.addEventListener('scroll', () => {
+      if (!isScrolling) {
+          requestAnimationFrame(() => {
+              updateActiveMenuItem();
+              isScrolling = false;
+          });
+          isScrolling = true;
+      }
+      
+      // Clear timeout and set new one
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+          updateActiveMenuItem();
+      }, 150);
+  });
 }
 
 // Straight grid pulses disabled per user request; keeping only chaotic walkers.
@@ -619,3 +449,29 @@ if (sections.length) {
   for (let i=0;i<2;i++) setTimeout(spawnWalker, rand(300, 900));
   schedule();
 })();
+
+// Report Button functionality
+function initReportButton() {
+    const reportBtn = document.querySelector('.report-btn');
+    if (reportBtn) {
+        reportBtn.addEventListener('click', () => {
+            // Scroll to contact section
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            
+            // Show toast notification
+            showToast('הפניה לסקציית צור קשר', 'info');
+        });
+    }
+}
+
+// Clean Mossad-style effects
+function initIntelligenceEffects() {
+    // Simple, clean effects only
+    console.log('Clean Mossad-style effects initialized');
+}
