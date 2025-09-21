@@ -11,6 +11,7 @@
 
   const logoSrc = `${import.meta.env.BASE_URL}assets/logo.svg`;
   const logoVersionedSrc = `${logoSrc}?v=3`;
+  const reportsUrl = `${import.meta.env.BASE_URL}data/reports.json`;
 
   let activeHash = '#home';
   let menuOpen = false;
@@ -387,7 +388,7 @@
 
   async function fetchReports() {
     try {
-      const response = await fetch('/data/reports.json', { cache: 'no-store' });
+      const response = await fetch(reportsUrl, { cache: 'no-store' });
       if (!response.ok) {
         throw new Error(`Bad status: ${response.status}`);
       }
