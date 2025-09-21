@@ -1,33 +1,33 @@
-# חזית המגן: שומרי האיזון
+# The Shield Front: Guardians of Balance
 
-פרויקט הפרונטנד נבנה מחדש עם [Svelte](https://svelte.dev) ו-[Vite](https://vite.dev). הוא מהווה אתר סטטי מלא עבור הארגון "חזית המגן: שומרי האיזון", כולל אנימציות, טעינת דוחות דינמית ויכולות נגישות מחוזקות.
+This repository contains the Svelte + Vite frontend for the civic organization "The Shield Front". The project delivers a fast static site with animated UI elements, dynamic report loading, and strengthened accessibility.
 
-## דרישות מקומיות
+## Prerequisites
 
-- [Bun](https://bun.sh/) ≥ 1.2 (מותקן כבר בסביבת העבודה)
+- [Bun](https://bun.sh/) ≥ 1.2 (already installed in the environment)
 
-## פקודות שימושיות
+## Useful Commands
 
 ```bash
-bun install        # התקנת תלויות
-bun run dev        # שרת פיתוח בכתובת http://localhost:5173
-bun run build      # קומפילציית פרודקשן לתיקיית dist/
-bun run preview    # תצוגה מקומית של תוצר ה-build
+bun install        # install dependencies
+bun run dev        # start dev server (default http://localhost:5173)
+bun run build      # produce production build to dist/
+bun run preview    # preview the production build locally
 ```
 
-קבצי ה-HTML/JS/CSS המוכנים לפריסה נוצרים תחת `dist/`. ניתן להעלות את התיקייה הזו לכל CDN או שרת סטטי.
+The build artefacts (HTML/JS/CSS) live under `dist/` and can be deployed to any static hosting/CDN.
 
-## מבנה התיקיות
+## Project Structure
 
-- `src/` – רכיבי Svelte, לוגיקת UI ואפקטים אינטראקטיביים
-- `public/` – קבצים סטטיים המתפרסמים כפי שהם (לוגו, sitemap, robots, נתוני הדוחות ועוד)
-- `app.css` – סגנונות גלובליים שהוסבו מהפרויקט המקורי
-- `vite.config.js` / `svelte.config.js` – הגדרות הפרויקט
+- `src/` – Svelte components, interactions, and global styles (`app.css`)
+- `public/` – static assets served as-is (logo, sitemap, robots, reports data, etc.)
+- `svelte.config.js` & `vite.config.js` – project configuration
+- `bun.lock` – Bun lockfile
 
-## הערות יישום
+## Implementation Notes
 
-- טעינת הדוחות מתבצעת מקריאת `public/data/reports.json` עם טיפול בשגיאות והצגת טקסט חלופי.
-- מערכת הטוסטים, סרגל ההתקדמות, תפריט הנייד והאפקטים (reveal-on-scroll וה-"walkers") כתובים מחדש ב-Svelte ומגיבים להעדפות נגישות (`prefers-reduced-motion`).
-- מדיניות ה-CSP שומרת על `script-src 'self'` ומאפשרת רק את סקריפט ה-JSON-LD באמצעות hash ידני. אם תשנו את התוכן שלו – יש לחשב hash חדש.
+- The reports list is fetched from `public/data/reports.json` with graceful error handling.
+- Toasts, the progress bar, burger navigation, reveal-on-scroll animations, and grid walkers were reimplemented with Svelte and respect `prefers-reduced-motion`.
+- CSP remains strict (`script-src 'self'`); only the JSON-LD script is whitelisted via a manual SHA-256 hash. Recalculate the hash if you edit the payload.
 
-בהצלחה!
+Feel free to extend components or localize the content—Svelte makes it straightforward to add new sections or dynamic behavior.
