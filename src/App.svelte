@@ -9,6 +9,9 @@
     { href: '#contact', label: 'צור קשר' }
   ];
 
+  const logoSrc = `${import.meta.env.BASE_URL}assets/logo.svg`;
+  const logoVersionedSrc = `${logoSrc}?v=3`;
+
   let activeHash = '#home';
   let menuOpen = false;
   let toasts = [];
@@ -453,7 +456,7 @@
 <header class="site-header">
   <div class="wrap nav">
     <a class="brand" href="#home" aria-label="חזית המגן: שומרי האיזון">
-      <img class="brand-logo" src="/assets/logo.svg?v=3" alt="חזית המגן: שומרי האיזון" />
+      <img class="brand-logo" src={logoVersionedSrc} alt="חזית המגן: שומרי האיזון" />
       <div class="t"><b>חזית המגן: שומרי האיזון</b></div>
     </a>
 
@@ -504,7 +507,7 @@
   <div class="pulses" aria-hidden="true" bind:this={pulsesContainer}></div>
   <div class="inner" id="main-content">
     <div class="logo-badge-wrap">
-      <img class="logo-badge reveal delay-0" src="/assets/logo.svg" alt="חזית המגן" fetchpriority="high" />
+      <img class="logo-badge reveal delay-0" src={logoSrc} alt="חזית המגן" fetchpriority="high" />
     </div>
     <h1 class="reveal delay-1">ברוכים הבאים</h1>
     <p class="lead reveal delay-2">
@@ -612,3 +615,5 @@
 <footer>
   <div class="wrap">© 2024 – 2025 חזית המגן. כל הזכויות שמורות.</div>
 </footer>
+  const logoSrc = `${import.meta.env.BASE_URL}assets/logo.svg`;
+  const logoVersionedSrc = `${logoSrc}?v=3`;
