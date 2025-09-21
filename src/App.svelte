@@ -615,5 +615,3 @@
 <footer>
   <div class="wrap">© 2024 – 2025 חזית המגן. כל הזכויות שמורות.</div>
 </footer>
-  const logoSrc = `${import.meta.env.BASE_URL}assets/logo.svg`;
-  const logoVersionedSrc = `${logoSrc}?v=3`;
