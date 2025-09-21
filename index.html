@@ -1,239 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0f17" />
     <meta name="color-scheme" content="dark" />
-    
-    <!-- Security Headers -->
+
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
-    
-    <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' 'unsafe-inline';
-        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'sha256-T2FWGF7yHZdFihxn5Yhdudt7rZJcw4CSi4xa8vtgCHQ=';
+        style-src 'self' https://fonts.googleapis.com;
         img-src 'self' data:;
-        font-src 'self';
+        font-src 'self' https://fonts.gstatic.com;
         connect-src 'self';
         frame-ancestors 'none';
         base-uri 'self';
         form-action 'self';
+        object-src 'none';
     " />
+
     <title>חזית המגן: שומרי האיזון</title>
     <meta name="description" content="ארגון אזרחי מחקרי, נטול שיוך פוליטי, המספק מידע מבוסס-עובדות לרשויות אכיפה, לגופי מודיעין ולציבור בישראל." />
     <meta name="keywords" content="OSINT, מודיעין, ביטחון, ישראל, ארגון אזרחי, מחקר, אכיפת חוק" />
     <meta name="author" content="חזית המגן: שומרי האיזון" />
-    
-    <!-- Open Graph / Facebook -->
+
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://theshieldfront.org/" />
     <meta property="og:title" content="חזית המגן: שומרי האיזון" />
     <meta property="og:description" content="ארגון אזרחי מחקרי, נטול שיוך פוליטי, המספק מידע מבוסס-עובדות לרשויות אכיפה, לגופי מודיעין ולציבור בישראל." />
     <meta property="og:image" content="https://theshieldfront.org/assets/logo.svg" />
     <meta property="og:locale" content="he_IL" />
-    
-    <!-- Twitter -->
+
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://theshieldfront.org/" />
     <meta property="twitter:title" content="חזית המגן: שומרי האיזון" />
     <meta property="twitter:description" content="ארגון אזרחי מחקרי, נטול שיוך פוליטי, המספק מידע מבוסס-עובדות לרשויות אכיפה, לגופי מודיעין ולציבור בישראל." />
     <meta property="twitter:image" content="https://theshieldfront.org/assets/logo.svg" />
-    
-    <link rel="icon" href="assets/logo.svg" />
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="style.css" as="style" />
-    <link rel="preload" href="main.js" as="script" />
-    <link rel="preload" href="assets/logo.svg" as="image" />
-    
-    <!-- DNS prefetch for external resources -->
+
+    <link rel="icon" href="/assets/logo.svg" />
+    <link rel="preload" href="/assets/logo.svg" as="image" />
+    <link rel="canonical" href="https://theshieldfront.org/" />
+
     <link rel="dns-prefetch" href="//t.me" />
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css?v=17" />
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "חזית המגן: שומרי האיזון",
-        "alternateName": "The Shield Front: Guardians of Balance",
-        "description": "ארגון אזרחי מחקרי, נטול שיוך פוליטי, המספק מידע מבוסס-עובדות לרשויות אכיפה, לגופי מודיעין ולציבור בישראל.",
-        "url": "https://theshieldfront.org/",
-        "logo": "https://theshieldfront.org/assets/logo.svg",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "soft.wzrgz@passmail.net",
-            "contactType": "customer service",
-            "availableLanguage": ["Hebrew", "English"]
-        },
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "חיפה",
-            "addressCountry": "IL"
-        },
-        "sameAs": [
-            "https://t.me/your_channel"
-        ],
-        "foundingDate": "2024",
-        "areaServed": "Israel",
-        "knowsAbout": ["OSINT", "Intelligence", "Security", "Research", "Law Enforcement"]
-    }
-    </script>
-</head>
-<body>
-<!-- Skip links for accessibility -->
-<div class="skip-links">
-    <a href="#main-content" class="skip-link">דלג לתוכן הראשי</a>
-    <a href="#navigation" class="skip-link">דלג לתפריט</a>
-</div>
 
-<!-- Toast notifications -->
-<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-<!-- Progress bar -->
-<div class="progress-container">
-    <div class="progress-bar" id="progress-bar"></div>
-    <div class="progress-glow" id="progress-glow"></div>
-</div>
-
-<!-- Mouse cursor effects -->
-
-<!-- Clean UI elements in Mossad style -->
-<div class="scan-lines" aria-hidden="true"></div>
-<div class="grid-overlay" aria-hidden="true"></div>
-
-<!-- Header -->
-<header class="site-header">
-    <div class="wrap nav">
-        <a class="brand" href="#home" aria-label="חזית המגן: שומרי האיזון">
-            <img class="brand-logo" src="assets/logo.svg?v=3" alt="חזית המגן: שומרי האיזון" />
-            <div class="t"><b>חזית המגן: שומרי האיזון</b></div>
-        </a>
-        
-        <nav class="menu" id="navigation" aria-label="תפריט ראשי">
-            <a href="#home">ראשי</a>
-            <a href="#mission">אודות</a>
-            <a href="#reports">דוחות</a>
-            <a href="#contact">צור קשר</a>
-        </nav>
-        
-        <div class="header-actions">
-            <!-- Language Selector -->
-            <div class="language-selector">
-                <button class="lang-btn active" data-lang="he" aria-label="עברית">עברית</button>
-                <button class="lang-btn disabled" data-lang="ar" aria-label="العربية">العربية</button>
-                <button class="lang-btn disabled" data-lang="en" aria-label="English">English</button>
-                <button class="lang-btn disabled" data-lang="ru" aria-label="Русский">Русский</button>
-            </div>
-            
-            <!-- Report Button -->
-            <button class="report-btn" aria-label="שליחת דיווח">
-                <span class="btn-text">שליחת דיווח</span>
-                <span class="btn-icon">📊</span>
-            </button>
-        </div>
-        
-        <button class="burger" id="burger" aria-label="פתח/סגור תפריט" aria-controls="menu" aria-expanded="false">☰</button>
-    </div>
-</header>
-
-<!-- Hero -->
-<main id="home" class="hero">
-    <div class="pulses" aria-hidden="true"></div> <!-- импульсы по сетке -->
-    <div class="inner" id="main-content">
-        <div class="logo-badge-wrap">
-            <img class="logo-badge reveal delay-0" src="assets/logo.svg" alt="חזית המגן" />
-        </div>
-        <h1 class="reveal delay-1">ברוכים הבאים</h1>
-        <p class="lead reveal delay-2">
-            ארגון אזרחי בלתי ממשלתי החוקר ואוסף מידע על אנשים וארגונים הפועלים נגד מדינת ישראל, וכן על אנטישמיות, הטרדה מינית וניצול קטינים.
-            המידע נאסף ממקורות פתוחים ונועד לסייע לרשויות החוק, לגורמי ביטחון ולציבור בהתמודדות עם איומים על שלום הציבור וביטחון המדינה.
-        </p>
-        <div class="actions">
-            <a class="btn primary reveal delay-3" href="#contact">צור קשר</a>
-            <a class="btn ghost reveal delay-4" href="#mission">על המתודולוגיה</a>
-        </div>
-    </div>
-</main>
-
-<!-- What we do -->
-<section id="mission">
-    <div class="wrap">
-        <div class="title"><h2>מה אנחנו עושים</h2></div>
-        <p class="muted center">
-            ארגון אזרחי בלתי תלוי המספק מידע מבוסס עובדות. ללא הטיות פוליטיות או אתניות.
-            מתודולוגיה ממוקדת בדיקה, אימות והצלבה.
-        </p>
-        <div class="cards" data-reveal-group>
-            <article class="card reveal-on-scroll"><div class="icon">🛰️</div><h3>איסוף OSINT</h3><p class="muted">כריית נתונים ממקורות גלויים, ניטור נכסים דיגיטליים ותיעוד פומבי.</p></article>
-            <article class="card reveal-on-scroll"><div class="icon">🔗</div><h3>ניתוח והצלבות</h3><p class="muted">קישור ישויות, אירועים ותשתיות לכדי תמונת מצב אמינה.</p></article>
-            <article class="card reveal-on-scroll"><div class="icon">🤝</div><h3>שיתופי פעולה</h3><p class="muted">מסירת ממצאים לרשויות מוסמכות ולנפגעי עבירה, בהתאם לחוק.</p></article>
-            <article class="card reveal-on-scroll"><div class="icon">📑</div><h3>שקיפות ואתיקה</h3><p class="muted">נהלי תיעוד, רישום גרסאות, ותיקונים פומביים כשנדרש.</p></article>
-        </div>
-    </div>
-</section>
-
-<!-- Reports -->
-<section id="reports">
-    <div class="wrap">
-        <div class="title"><h2>דוחות אחרונים</h2></div>
-        <div class="list" data-reveal-group>
-            <div class="report reveal-on-scroll"><div>מיפוי תשתיות דיגיטליות סביב אירועי השחתה</div><small>אוג׳ 2025</small></div>
-            <div class="report reveal-on-scroll"><div>ניתוח רשתות הפצה של דיסאינפורמציה</div><small>יול׳ 2025</small></div>
-            <div class="report reveal-on-scroll"><div>קשרים גלויים בין ארגונים עוינים לגורמי מימון</div><small>יונ׳ 2025</small></div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact -->
-<section id="contact">
-    <div class="wrap">
-        <div class="title"><h2>צור קשר</h2></div>
-        <div class="contact">
-            <div class="box">
-                <h3>דרכי התקשרות</h3>
-                <ul>
-                    <li>דוא״ל: <a href="mailto:soft.wzrgz@passmail.net">soft.wzrgz@passmail.net</a></li>
-                    <li>טלגרם: <a href="https://t.me/your_channel" target="_blank" rel="noopener">@your_channel</a></li>
-                    <li>כתובת למשלוח דואר: חיפה, ישראל</li>
-                </ul>
-            </div>
-            <div class="box">
-                <h3>הודעה מהירה</h3>
-                <form id="quick-form" novalidate autocomplete="on">
-                    <input type="hidden" name="csrf_token" value="" id="csrf-token" />
-                    <label for="replyEmail">דוא״ל לחזרה</label>
-                    <input id="replyEmail" name="email" type="email" autocomplete="email" required placeholder="name@example.com" />
-                    <label for="message" style="margin-top:10px">הודעה</label>
-                    <textarea id="message" name="message" required></textarea>
-                    <div style="margin-top:10px">
-                        <button class="btn primary" type="submit" id="submit-btn">
-                            <span class="btn-text">שליחה</span>
-                            <span class="btn-loading" style="display:none;">שולח...</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<footer><div class="wrap">© 2024 – 2025 חזית המגן. כל הזכויות שמורות.</div></footer>
-
-<script src="main.js" defer></script>
-</body>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"חזית המגן: שומרי האיזון","alternateName":"The Shield Front: Guardians of Balance","description":"ארגון אזרחי מחקרי, נטול שיוך פוליטי, המספק מידע מבוסס-עובדות לרשויות אכיפה, לגופי מודיעין ולציבור בישראל.","url":"https://theshieldfront.org/","logo":"https://theshieldfront.org/assets/logo.svg","contactPoint":{"@type":"ContactPoint","email":"soft.wzrgz@passmail.net","contactType":"customer service","availableLanguage":["Hebrew","English"]},"address":{"@type":"PostalAddress","addressLocality":"חיפה","addressCountry":"IL"},"sameAs":["https://t.me/your_channel"],"foundingDate":"2024","areaServed":"Israel","knowsAbout":["OSINT","Intelligence","Security","Research","Law Enforcement"]}</script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
