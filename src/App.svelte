@@ -39,6 +39,7 @@
   let revealControl;
   let pulsesCleanup = () => {};
   let sectionElements = [];
+  let scrollFrame = 0;
 
   const suspiciousPatterns = /<script|javascript:|on\w+\s*=/i;
 
@@ -106,8 +107,12 @@
   }
 
   function handleScroll() {
-    updateProgressBar();
-    updateActiveSection();
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      updateProgressBar();
+      updateActiveSection();
+    });
   }
 
   function handleDocumentClick(event) {
@@ -240,13 +245,21 @@
     let destroyed = false;
     let running = true;
 
+    const hardwareThreads = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4;
+    const lowPowerDevice = hardwareThreads <= 4;
+    const compactViewport = window.matchMedia('(max-width: 768px)').matches;
+    const maxWalkers = lowPowerDevice ? 1 : (compactViewport ? 2 : 3);
+    const spawnRange = lowPowerDevice ? [1200, 2600] : (compactViewport ? [1000, 2200] : [800, 2000]);
+
+    const spawnDelay = () => rand(spawnRange[0], spawnRange[1]);
+
     const visibilityHandler = () => {
       running = document.visibilityState === 'visible';
     };
 
     document.addEventListener('visibilitychange', visibilityHandler);
 
-    const schedule = (delay = rand(900, 2200)) => {
+    const schedule = (delay = spawnDelay()) => {
       if (destroyed) return;
       const id = setTimeout(() => {
         timeouts.delete(id);
@@ -258,6 +271,11 @@
     const spawnWalker = () => {
       if (destroyed) return;
       if (!running) {
+        schedule();
+        return;
+      }
+
+      if (container.childElementCount >= maxWalkers) {
         schedule();
         return;
       }
@@ -277,7 +295,7 @@
 
       let gx = Math.floor(rand(1, Math.max(2, cols - 1)));
       let gy = Math.floor(rand(1, Math.max(2, rows - 1)));
-      let stepsLeft = Math.floor(rand(6, 18));
+      let stepsLeft = Math.floor(rand(lowPowerDevice ? 4 : 6, lowPowerDevice ? 12 : 18));
       let lastDir = pick(DIRS);
 
       const localTimeouts = new Set();
@@ -362,18 +380,18 @@
         el.style.transform = `translate(${gx * GRID}px, ${gy * GRID}px)`;
         centerDim();
 
-        if (Math.random() < 0.06) {
+        if (Math.random() < 0.04) {
           stepsLeft = 0;
         }
 
         scheduleLocal(tickWalker, duration * 1000 + 10);
       };
 
-      scheduleLocal(tickWalker, rand(40, 140));
+      scheduleLocal(tickWalker, rand(60, 140));
       schedule();
     };
 
-    for (let i = 0; i < 2; i += 1) {
+    for (let i = 0; i < maxWalkers; i += 1) {
       schedule(rand(300, 900));
     }
 
@@ -426,6 +444,10 @@
     fetchReports();
 
     return () => {
+      if (scrollFrame) {
+        cancelAnimationFrame(scrollFrame);
+        scrollFrame = 0;
+      }
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('click', handleDocumentClick);
       window.removeEventListener('keydown', handleKeydown);
